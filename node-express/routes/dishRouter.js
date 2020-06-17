@@ -1,7 +1,6 @@
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const dishRouter = express.Router();
 
 dishRouter.use(bodyParser.json());
@@ -29,8 +28,7 @@ dishRouter.route('/')
 })
 
 .delete((req,res,next)=>{
-    res.statusCode=403;
-    res.end('Delete operation not supported yet')
+    res.end('Deleting all dishes')
 });
 
 module.exports = dishRouter;
