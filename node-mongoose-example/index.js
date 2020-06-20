@@ -13,13 +13,25 @@ connect.then((db) =>{
         description:'test'
     })
     .then((dish)=>{
+        console.log('Inserted: ');
         console.log(dish);
 
-        return Dishes.find({}).exec();
+        return Dishes.findByIdAndUpdate(dish._id,{$set : {description:'Updated Test'}},{new:true}).exec();
     })
-    .then((dishes)=>{
-        console.log(dishes)
+    .then((dish)=>{
+        console.log('Updated: ');
+        console.log(dish)
+        dish.comments.push({
+            rating:5,
+            comment:'I love this Dish',
+            author:'Thilina Liyanage'
+        });
 
+        return dish.save();
+    })
+    .then((dish)=>{
+        console.log('Removed: ');
+        console.log(dish)
         return Dishes.remove({});
     })
     .then(()=>{
