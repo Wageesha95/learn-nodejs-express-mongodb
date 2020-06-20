@@ -5,33 +5,42 @@ const dbopers = require('./operations')
 const url = 'mongodb://localhost:27017/';
 const dbname ='confusion';
 
-MongoClient.connect(url,(err,client) =>{
+MongoClient.connect(url).then((client) =>{
 
-    assert.equal(err,null);
     console.log('\n Connected to the db Succesfully \n');
 
     const db=client.db(dbname);
     
-    dbopers.insertDocument(db,{name:"Vandonut",description:"Test"},'dishes',(result)=>{
+    dbopers.insertDocument(db,{name:"Vandonut",description:"Test"},'dishes')
+    .then((result)=>{
         console.log('Insert Document:\n',result.ops);
 
-        dbopers.findDocuments(db,'dishes',(docs)=>{
-            console.log('Found Document :\n',docs);
+        return dbopers.findDocuments(db,'dishes');
+    })
+    .then((docs)=>{
+        console.log('Found Document :\n',docs);
 
-            dbopers.updateDocument(db,{name:'Vandonut'},{description:'Update Test'},'dishes',(result)=>{
-                console.log('Updated Document:\n',result.result)
+        return dbopers.updateDocument(db,{name:'Vandonut'},{description:'Update Test'},'dishes')
+    })
+    .then((result)=>{
+        console.log('Updated Document:\n',result.result);
 
-                dbopers.findDocuments(db,'dishes',(docs)=>{
-                    console.log('Found Document :\n',docs);
+        return dbopers.findDocuments(db,'dishes');
+    })
+    .then((docs)=>{
+        console.log('Found Document :\n',docs);
 
-                    db.dropCollection('dishes',(result)=>{
-                        console.log('Droped Collection:',result);
+        return db.dropCollection('dishes');
+    })
+    .then((result)=>{
+        console.log('Droped Collection:',result);
 
-                        client.close();
-                    })
-                });  
-            });
-        });
+        client.close();
+    })
+    .catch((err)=>{
+        console.log(err);
     });
 
+}).catch((err)=>{
+    console.log(err);
 });
