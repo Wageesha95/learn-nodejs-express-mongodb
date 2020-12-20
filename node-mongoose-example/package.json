@@ -10,6 +10,6 @@
   "author": "ThilinaL",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^5.5.7"
+    "mongoose": "^5.7.5"
   }
 }
